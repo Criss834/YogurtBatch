@@ -1,0 +1,42 @@
+package com.criss.demo.domain.model;
+
+import java.time.LocalDateTime;
+
+import jakarta.persistence.*; // ← puedes usar este para simplificar imports
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "temperature_logs")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class TemperatureLog {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @ManyToOne
+    @JoinColumn(name = "batch_id", nullable = false)
+    private YogurtBatch batch;
+    
+    @Column(nullable = false)
+    private Double temperature; // °C
+    
+    @Column(nullable = false)
+    private LocalDateTime recordedAt;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private LogType type;
+    
+    private String notes;
+    
+    public enum LogType {
+        HEATING, COOLING, INCUBATION, REFRIGERATION, MANUAL
+    }
+}
